@@ -16,6 +16,9 @@
 
   --composer-gap:18px;
   --spacer-extra:28px;
+
+  --content-max:760px;
+  --content-side:14px;
 }
 
 html,body{
@@ -45,12 +48,18 @@ body{
   border-bottom:1px solid #151515;
 }
 
+.topbar-shell{
+  width:100%;
+  max-width:var(--content-max);
+  margin:0 auto;
+  padding:10px var(--content-side);
+}
+
 .topbar-scroll{
   width:100%;
   overflow-x:auto;
   overflow-y:hidden;
   -webkit-overflow-scrolling:touch;
-  padding:10px 0;
   scrollbar-width:none;
 }
 
@@ -61,8 +70,6 @@ body{
 .topbar-inner{
   width:max-content;
   min-width:100%;
-  max-width:none;
-  padding:0 14px;
   display:flex;
   align-items:center;
   justify-content:flex-end;
@@ -78,12 +85,11 @@ body{
   border-radius:999px;
   border:1px solid #2a2a2a;
   background:#101010;
+  flex:0 0 auto;
 }
 
 .model-pill{
-  flex:0 0 auto;
   min-width:260px;
-  max-width:none;
 }
 
 .model-label{
@@ -101,7 +107,6 @@ select{
   padding:6px 10px;
   outline:none;
   min-width:180px;
-  max-width:none;
   flex:0 0 auto;
 }
 
@@ -147,7 +152,7 @@ select option{
 
 .chat{
   width:100%;
-  max-width:760px;
+  max-width:var(--content-max);
   padding:0 16px;
 }
 
@@ -251,8 +256,8 @@ select option{
 .input-inner{
   pointer-events:auto;
   width:100%;
-  max-width:760px;
-  margin:0 14px;
+  max-width:var(--content-max);
+  margin:0 var(--content-side);
   background:var(--input-bg);
   border:1px solid var(--input-border);
   border-radius:26px;
@@ -484,12 +489,16 @@ button#sendBtn:hover{
 }
 
 @media (max-width:768px){
-  .topbar-scroll{
-    padding:8px 0;
+  :root{
+    --composer-gap:12px;
+    --content-side:10px;
+  }
+
+  .topbar-shell{
+    padding:8px var(--content-side);
   }
 
   .topbar-inner{
-    padding:0 10px;
     gap:8px;
   }
 
@@ -537,17 +546,12 @@ button#sendBtn:hover{
   }
 
   .input-inner{
-    margin:0 10px;
     border-radius:20px;
   }
 
   button#sendBtn{
     padding:9px 12px;
     border-radius:16px;
-  }
-
-  :root{
-    --composer-gap:12px;
   }
 }
 
