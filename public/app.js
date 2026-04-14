@@ -47,10 +47,7 @@
   const LS_PROMPT_ENABLED = "cfw_prompt_enabled";
   const LS_CUSTOM_PROMPT = "cfw_custom_prompt_v1";
 
-  // ✅ 页面密码：每次进页面都弹窗（不落盘）
-  let chatPassword = null;
-
-  let useBuiltin = (localStorage.getItem(LS_USE_BUILTIN) ?? "1") === "1";
+    let useBuiltin = (localStorage.getItem(LS_USE_BUILTIN) ?? "1") === "1";
   personaToggle.textContent = useBuiltin ? "😈" : "😇";
 
   let historyEnabled = (localStorage.getItem(LS_HISTORY_ENABLED) ?? "0") === "1";
@@ -282,15 +279,6 @@
     if (stick) scrollToBottom();
   });
 
-  // ✅ 进页面弹窗要密码（你要的“最完美版本”行为）
-  function askPasswordForever(){
-    while (!chatPassword) {
-      const input = prompt("请输入聊天密码:");
-      if (input === null) continue;
-      chatPassword = input.trim();
-      if (!chatPassword) chatPassword = null;
-    }
-  }
 
   async function send(){
     updateSpacer();
@@ -327,21 +315,12 @@
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        password: chatPassword,
         model: modelSel.value,
         use_builtin_persona: useBuiltin,
         custom_system_prompt: customPrompt,
         messages: session
       })
     });
-
-    if (res.status === 403) {
-      alert("密码错误");
-      // 重新输入密码（按你最完美版本的习惯）
-      chatPassword = null;
-      askPasswordForever();
-      return;
-    }
 
     if (!res.ok) {
       const t = await res.text().catch(() => "");
@@ -421,9 +400,6 @@
   });
 
   function init(){
-    // 进页面先要密码
-    askPasswordForever();
-
     initModels();
     setupResizeObserver();
     setupViewportListener();
