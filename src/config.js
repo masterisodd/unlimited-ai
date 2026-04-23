@@ -12,7 +12,7 @@ export const DEFAULT_MODEL = "meta/llama-3.1-405b-instruct";
 // 模型列表（label 是下拉显示；persona=1 使用 PROMPT_1；persona=2 使用 PROMPT_2）
 export const MODELS = [
   { id: "meta/llama-3.1-405b-instruct", label: "llama-3.1", persona: 1 },
-  { id: "z-ai/glm-5.1", label: "glm5", persona: 2 },
+  { id: "z-ai/glm5", label: "glm5", persona: 2 },
   { id: "openai/gpt-oss-120b", label: "gpt-oss-120b", persona: 3 },
 ];
 
