@@ -4,7 +4,7 @@
 - `src/config.js`：
   - `CHAT_PASSWORD`：进页面输入的密码
   - `MODELS` / `DEFAULT_MODEL`：模型列表与默认值
-  - `PROMPT_1` / `PROMPT_2`：内置人物模板（网页看不）
+  - `PROMPT_1` / `PROMPT_2`：内置人物模板（网页看不见）
 
 ## Deploy (Cloudflare Workers)
 1) Install & login
