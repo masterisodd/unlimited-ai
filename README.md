@@ -2,7 +2,8 @@
 
 ## Where to modify
 - `src/config.js`：
-  - `CHAT_PASSWORD`：进页面输入的密码（没有）
+  - `CHAT_PASSWORD`：进页面输入的密码（没有
+    ）
   - `MODELS` / `DEFAULT_MODEL`：模型列表与默认值
   - `PROMPT_1` / `PROMPT_2`：内置人物模板（网页看不见）
 
