@@ -1,9 +1,7 @@
-iimport {
+import {
   DEFAULT_MODEL,
   MODELS,
-  PROMPT_1,
-  PROMPT_2,
-  PROMPT_3
+  PROMPT_2,   // 只导入当前使用的内置角色
 } from "./config.js";
 
 function resp(body, contentType = "text/plain; charset=utf-8", status = 200, extraHeaders = {}) {
@@ -21,12 +19,8 @@ function isAllowedModel(modelId) {
 }
 
 function builtinPromptForModel(modelId) {
-  const meta = MODELS.find((m) => m.id === modelId);
-  const persona = meta?.persona ?? 1;
-
-  if (persona === 3) return PROMPT_3;
-  if (persona === 2) return PROMPT_2;
-  return PROMPT_1;
+  // 当前只有一个模型，直接返回 PROMPT_2
+  return PROMPT_2;
 }
 
 function clientConfigJs() {
@@ -48,8 +42,8 @@ async function handleChat(request, env) {
     return resp("Bad JSON", "text/plain; charset=utf-8", 400);
   }
 
-  // 硬编码模型为智谱 GLM-5.1，忽略前端选择
-  const model = "glm-5.1";
+  const requestedModel = payload?.model;
+  const model = isAllowedModel(requestedModel) ? requestedModel : DEFAULT_MODEL;
 
   const useBuiltinPersona = payload?.use_builtin_persona !== false;
   const customSystemPrompt =
@@ -61,7 +55,6 @@ async function handleChat(request, env) {
   const upstreamMessages = [];
 
   if (useBuiltinPersona) {
-    // builtinPromptForModel 找不到 "glm-5.1" 时会 fallback 到 PROMPT_1
     upstreamMessages.push({
       role: "system",
       content: builtinPromptForModel(model)
@@ -83,7 +76,7 @@ async function handleChat(request, env) {
     });
   }
 
-  // 环境变量改为 ZHIPU_API_KEY
+  // 检查智谱官方 API Key
   if (!env.ZHIPU_API_KEY) {
     return resp(
       "Missing ZHIPU_API_KEY (please set it with wrangler secret).",
@@ -92,7 +85,7 @@ async function handleChat(request, env) {
     );
   }
 
-  // 调用智谱 API（兼容 OpenAI 格式）
+  // 智谱官方 API 端点
   const upstream = await fetch("https://open.bigmodel.cn/api/paas/v4/chat/completions", {
     method: "POST",
     headers: {
@@ -100,10 +93,10 @@ async function handleChat(request, env) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      model,
+      model,   // 自动传入 "glm-5.1"
       stream: true,
-      stream_options: { include_usage: true },   // 如果智谱报错可删除此行
       messages: upstreamMessages
+      // 注意：已移除 NVIDIA 专属的 stream_options 参数
     })
   });
 
