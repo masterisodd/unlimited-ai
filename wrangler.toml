@@ -1,4 +1,4 @@
-name = "unlimited-ai"
+name = "test1"
 main = "src/worker.js"
 compatibility_date = "2026-03-11"
 
